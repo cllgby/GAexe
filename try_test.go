@@ -5,14 +5,16 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/go-playground/assert/v2"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGetRandom(t *testing.T) {
+	assert := assert.New(t)
 	for range 5 {
 		ran := rand.IntN(10) + 1
 		result := getRandom(ran)
-		assert.Equal(t, ran, len(result))
-		assert.Equal(t, ran, len(slices.Compact(result)))
+		assert.Equal(ran, len(result), "expected %d elements, got %d", ran, len(result))
+		assert.True(slices.IsSorted(result), "result is not sorted")
+		assert.True(ran == len(slices.Compact(result)), "result has duplicates")
 	}
 }
